@@ -1,0 +1,17 @@
+{
+  "event_id": "demo-unknown-tool-002",
+  "component": "agent-runtime",
+  "change_type": "new-tool-connector",
+  "features": {
+    "critical_vulnerability": false,
+    "high_vulnerability": false,
+    "privilege_escalation": false,
+    "unsigned_artifact": false,
+    "secret_exposure": false,
+    "unknown_component": true,
+    "untrusted_source": false,
+    "sensitive_data_change": false,
+    "network_exposure_change": true,
+    "assessment_incomplete": true
+  }
+}
