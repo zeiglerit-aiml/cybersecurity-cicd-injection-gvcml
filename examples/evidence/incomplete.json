@@ -1,0 +1,9 @@
+{
+  "functional_passed": true,
+  "security_passed": false,
+  "signed_artifact": false,
+  "full_attack_surface_assessed": false,
+  "sandbox_passed": false,
+  "critical_findings": 0,
+  "evidence_refs": []
+}
