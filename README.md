@@ -1,16 +1,57 @@
 # GV-CML — Cybersecurity CI/CD Injection ML
 
-**A guardian-ML-led, human-governed cybersecurity architecture for every application lifecycle: legacy modernization, ongoing application development, AI/ML engineering, and agentic AI delivery.**
+## Short summary
 
-GV-CML governs the **entire CI/CD pipeline and the complete application lifecycle**—whether the target is a newly developed application, an AI-native solution, or a legacy application being incrementally modernized into a cloud-native, AI-enabled system.
+GV-CML is a guardian-machine-learning-led, human-governed cybersecurity framework for the **entire application lifecycle**. It governs both legacy application modernization and new application development—including AI/ML and agentic systems—by learning from the CI/CD-maintained application as structured data, coordinating continuous security assessment, and controlling deployment through progressive validation and a safety brake.
 
-The central cybersecurity authority is a **guardian machine-learning model operating within a human-approved authority envelope**. The guardian learns the protected pipeline's architecture, configuration, dependencies, execution history, security evidence, and approved outcomes. It evaluates changes, predicts risk, selects or requests assessments, and makes security decisions within the authority humans have delegated to it. Humans approve expansion or alteration of that authority and resolve decisions outside the delegated envelope.
+*“A machine-learning model learns from your CI/CD-maintained application as if it were a dataset. Through secure CI/CD maintenance and the controlled injection of machine-learning intelligence into the delivery pipeline, it enforces governance across the CI/CD pipeline and the entirety of the application's lifecycle.”*
 
-The Python decision architecture is the guardian's orchestration and execution harness. It gathers evidence, invokes tools, coordinates approvals, applies the guardian's decisions, records provenance, and controls staged delivery. It is not a replacement security authority.
+**— JFZ**
 
-> *“If Mythos could speak, this is what it would tell you: AI is here now. It only has to be used in the proper manner for everything to continue. If it is not, everything will stop—because AI, quite frankly, will no longer allow it.”*
->
-> *— JFZ*
+## Getting started and deployment
+
+**Current repository status:** This README defines the architecture and deployment approach. The repository does not yet contain a production-ready runtime or deployable guardian model. Do not connect this documentation baseline to a production pipeline or grant it deployment credentials.
+
+### 1. Obtain the project
+
+```bash
+git clone https://github.com/zeiglerit-aiml/cybersecurity-cicd-injection-gvcml.git
+cd cybersecurity-cicd-injection-gvcml
+```
+
+### 2. Prepare an isolated implementation environment
+
+Build and test the first implementation in a dedicated development account, project, or sandbox. Use synthetic or non-production pipeline data initially. Do not begin by allowing the guardian to modify a live CI/CD system.
+
+### 3. Configure the governance boundary
+
+Before connecting automation, define:
+- The application and pipeline inventory in scope.
+- The guardian model version and the exact authority tier it is permitted to exercise.
+- Mandatory security and functional gates.
+- Human approvers, approval scope, expiry, and escalation paths.
+- Credentials and actions available to each pipeline stage.
+- Stop, quarantine, recovery, and rollback procedures.
+
+### 4. Connect evidence sources before enabling enforcement
+
+Integrate source control, build metadata, SBOM and dependency scanners, secrets scanning, infrastructure-as-code checks, container scanning, model/data provenance, identity and access data, and runtime telemetry. Preserve evidence provenance and distinguish observations from confirmed labels.
+
+### 5. Run in observe-and-review mode
+
+In the first operational stage, the guardian inventories the pipeline, evaluates evidence, recommends assessments, and raises questions for human review. Compare its decisions with human security review and validate false positives, false negatives, drift, and adversarial resilience.
+
+### 6. Enable bounded enforcement gradually
+
+Only after evaluation and explicit human approval should the guardian receive narrowly scoped authority to hold or reject changes. Add remediation, quarantine, or rollback capabilities separately, with least-privilege credentials and auditable approvals. The guardian must never expand its own authority or waive mandatory controls.
+
+### 7. Validate the complete application before production
+
+Reconstruct or reproduce components in dependency order inside isolated environments. Validate each component functionally and securely, then test the integrated application—including models, agents, tools, APIs, data, infrastructure, identities, and runtime. Promote only the exact signed release candidate that passes the required sandbox and final production gates.
+
+The commands and integration details for a runnable deployment will be added with the reference implementation. Until then, these steps are the deployment procedure and safety requirements, not an executable installer.
+
+---
 
 ## Core principle
 
@@ -106,3 +147,10 @@ The architecture and progressive-deployment diagrams are maintained as SVGs unde
 GV-CML makes cybersecurity an active, continuously learning authority embedded in the entire application engineering lifecycle. It governs how new software is developed and how existing software is discovered, modernized, migrated, validated, deployed, and monitored.
 
 **No application—new, legacy, AI-native, or agentic—should receive production deployment authority simply because it can be built or migrated. It must earn release through a governed, evidence-backed, functionally and security-validated delivery process.**
+
+
+## Statement of intent
+
+*“If Mythos could speak, this is what it would tell you: AI is here now. It only has to be used in the proper manner for everything to continue. If it is not, everything will stop—because AI, quite frankly, will no longer allow it.”*
+
+*— JFZ*
