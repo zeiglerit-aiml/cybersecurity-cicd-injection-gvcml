@@ -4,9 +4,11 @@
 
 GVC_ML is a guardian-machine-learning-led, human-governed cybersecurity framework for the **entire application lifecycle**. It governs legacy modernization and new application development—including AI/ML and agentic systems—by learning from the CI/CD-maintained application as structured data, coordinating continuous security assessment, and controlling delivery through progressive validation and a safety brake.
 
-$
-\\text{Cybersecurity} \\times \\sqrt{\\frac{\\text{CI/CD}}{\\text{Injection}}} \\times \\text{GVCML}
-$
+ 
+$$
+\text{Cybersecurity} \times \sqrt{\frac{\text{CI/CD}}{\text{Injection}}} \times \text{GVCML}
+$$
+
 *“A machine-learning model learns from your CI/CD-maintained application as if it were a dataset. Through secure CI/CD maintenance and controlled injection of machine-learning intelligence into the delivery pipeline, it enforces governance across the CI/CD pipeline and the entirety of the application's lifecycle.”*
 
 **— JFZ**
