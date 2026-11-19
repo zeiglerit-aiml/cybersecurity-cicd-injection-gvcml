@@ -1,0 +1,6 @@
+{
+  "reviewer": "demo-security-reviewer",
+  "scope": "demo-release-only",
+  "ticket": "DEMO-001",
+  "approved": true
+}
