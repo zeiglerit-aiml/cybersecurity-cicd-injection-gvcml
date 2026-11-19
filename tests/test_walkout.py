@@ -71,3 +71,29 @@ def test_stage_transition_requires_all_human_governance_evidence():
         WalkoutStage.ML_ASSISTED,
         TransitionEvidence(False, "", True, True, True),
     )
+
+
+def test_walkout_requires_matching_executable_chamber_contract():
+    from gvcml.contracts import Chamber, GateContract
+    from gvcml.walkout import evaluate_walkout_under_contract
+
+    req = request(human_approved=True)
+    approval = GateContract(
+        contract_id="GVCML-CHG-42",
+        application_id="payments-api",
+        change_id="change-42",
+        from_chamber=Chamber.HUMAN_GOVERNANCE,
+        to_chamber=Chamber.BOUNDED_EXECUTION,
+        human_approved=True,
+        human_reviewer="reviewer-1",
+        guardian_agreed=True,
+        guardian_model_version="guardian-v1",
+        scope_matches=True,
+        evidence_complete=True,
+        policy_allowed=True,
+    )
+    assert evaluate_walkout_under_contract(req, approval).action == WalkoutAction.EXECUTE
+    mismatched = GateContract(
+        **{**approval.__dict__, "change_id": "different-change"}
+    )
+    assert evaluate_walkout_under_contract(req, mismatched).action == WalkoutAction.HOLD
