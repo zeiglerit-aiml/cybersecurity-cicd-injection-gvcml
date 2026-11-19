@@ -124,3 +124,32 @@ def authorize_stage_transition(current: WalkoutStage, target: WalkoutStage,
         and evidence.policy_review_passed
         and evidence.rollback_ready
     )
+
+def evaluate_walkout_under_contract(request: WalkoutRequest, contract):
+    """Apply the executable chamber contract before returning a walkout decision.
+
+    The contract must bind to the same application and change as the request.
+    A denied contract always holds the request; it cannot override guardian STOP.
+    """
+    from .contracts import GateDenied, enforce_gate
+
+    base = evaluate_walkout(request)
+    if base.action == WalkoutAction.STOP:
+        return base
+    if contract.application_id != request.application_id or contract.change_id != request.change_id:
+        return WalkoutDecision(
+            action=WalkoutAction.HOLD, stage=request.stage,
+            next_actor="contract_review", human_approval_required=True,
+            rationale="Approval contract is not bound to this exact application and change.",
+            application_id=request.application_id, change_id=request.change_id,
+        )
+    try:
+        enforce_gate(contract)
+    except GateDenied as exc:
+        return WalkoutDecision(
+            action=WalkoutAction.HOLD, stage=request.stage,
+            next_actor="contract_review", human_approval_required=True,
+            rationale=str(exc), application_id=request.application_id,
+            change_id=request.change_id,
+        )
+    return base
