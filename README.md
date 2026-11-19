@@ -36,6 +36,13 @@ See [the Walkout System architecture](docs/walkout-system.md).
 
 This is a reference architecture, not a claim that production ITSM, Prometheus, Grafana, neural-network, deep-learning, or AI-agent integrations are already connected. Those require dedicated adapters, credentials, security review, monitoring, and integration tests.
 
+
+### Chamber contracts and executable gate APIs
+
+The Walkout System is a chamber architecture with contractual gates. Typed Python APIs enforce the default dual-agreement rule: human approval **and** GVCML guardian agreement, plus matching scope, complete evidence, and policy permission. The new `gvcml.contracts` module provides `GateContract`, `evaluate_gate`, `enforce_gate`, `GateReceipt`, `GateDenied`, and the `@requires_gate` decorator. A protected function does not run when a required contract condition fails.
+
+See [Chamber Contracts and Gate APIs](docs/chamber-contracts.md). The current implementation is a reference enforcement layer; production requires authenticated identities, signed assertions, replay protection, expiry/revocation, durable audit, and live policy/evidence checks.
+
 ## AI engineering safety objective
 
 GVCML is designed for an environment in which AI may increasingly generate, modify, test, secure, and operate software. The objective is to make that capability governable: inject security authority into the delivery lifecycle, require verifiable evidence, separate security decisions from human workflow decisions, and expand machine autonomy only within a tested and revocable control envelope. No model is assumed infallible, and no increase in AI capability removes the need for independent policy enforcement, provenance, audit, or recovery.
