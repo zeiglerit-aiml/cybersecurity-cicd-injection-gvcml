@@ -1,153 +1,130 @@
 # GV-CML — Cybersecurity CI/CD Injection ML
 
-## Short summary
+## Executive summary
 
-GV-CML is a guardian-machine-learning-led, human-governed cybersecurity framework for the **entire application lifecycle**. It governs both legacy application modernization and new application development—including AI/ML and agentic systems—by learning from the CI/CD-maintained application as structured data, coordinating continuous security assessment, and controlling deployment through progressive validation and a safety brake.
+GV-CML is a guardian-machine-learning-led, human-governed cybersecurity framework for the **entire application lifecycle**. It governs legacy modernization and new application development—including AI/ML and agentic systems—by learning from the CI/CD-maintained application as structured data, coordinating continuous security assessment, and controlling delivery through progressive validation and a safety brake.
 
-*“A machine-learning model learns from your CI/CD-maintained application as if it were a dataset. Through secure CI/CD maintenance and the controlled injection of machine-learning intelligence into the delivery pipeline, it enforces governance across the CI/CD pipeline and the entirety of the application's lifecycle.”*
+*“A machine-learning model learns from your CI/CD-maintained application as if it were a dataset. Through secure CI/CD maintenance and controlled injection of machine-learning intelligence into the delivery pipeline, it enforces governance across the CI/CD pipeline and the entirety of the application's lifecycle.”*
 
 **— JFZ**
 
-## Getting started and deployment
+## Installation
 
-**Current repository status:** This README defines the architecture and deployment approach. The repository does not yet contain a production-ready runtime or deployable guardian model. Do not connect this documentation baseline to a production pipeline or grant it deployment credentials.
-
-### 1. Obtain the project
+Requirements: Python 3.10+, Git, and an isolated environment.
 
 ```bash
 git clone https://github.com/zeiglerit-aiml/cybersecurity-cicd-injection-gvcml.git
 cd cybersecurity-cicd-injection-gvcml
+python -m venv .venv
+# Linux/macOS
+source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[ml,dev]"
 ```
 
-### 2. Prepare an isolated implementation environment
+## Quick start
 
-Build and test the first implementation in a dedicated development account, project, or sandbox. Use synthetic or non-production pipeline data initially. Do not begin by allowing the guardian to modify a live CI/CD system.
+Train the guardian using the included synthetic, illustrative, human-labelled fixture:
 
-### 3. Configure the governance boundary
+```bash
+gvcml train --dataset data/guardian_training.csv --output artifacts/guardian.joblib
+gvcml demo --model artifacts/guardian.joblib
+```
 
-Before connecting automation, define:
-- The application and pipeline inventory in scope.
-- The guardian model version and the exact authority tier it is permitted to exercise.
-- Mandatory security and functional gates.
-- Human approvers, approval scope, expiry, and escalation paths.
-- Credentials and actions available to each pipeline stage.
-- Stop, quarantine, recovery, and rollback procedures.
+Evaluate an event:
 
-### 4. Connect evidence sources before enabling enforcement
+```bash
+gvcml evaluate --model artifacts/guardian.joblib \
+  --event examples/events/unknown_agent_tool.json \
+  --evidence examples/evidence/passing_sandbox.json
+```
 
-Integrate source control, build metadata, SBOM and dependency scanners, secrets scanning, infrastructure-as-code checks, container scanning, model/data provenance, identity and access data, and runtime telemetry. Preserve evidence provenance and distinguish observations from confirmed labels.
+Run tests: `python -m pytest`.
 
-### 5. Run in observe-and-review mode
+**Important:** the included training data is a demonstration fixture, not production training data. Do not use this initial model to authorize real deployments.
 
-In the first operational stage, the guardian inventories the pipeline, evaluates evidence, recommends assessments, and raises questions for human review. Compare its decisions with human security review and validate false positives, false negatives, drift, and adversarial resilience.
+## Configuration and authority
 
-### 6. Enable bounded enforcement gradually
+Configuration: `config/governance.json`. The reference implementation starts in human-supervised mode. The guardian predicts ALLOW, HOLD, or STOP from structured pipeline features. The decision harness enforces mandatory evidence and explicit human release approval.
 
-Only after evaluation and explicit human approval should the guardian receive narrowly scoped authority to hold or reject changes. Add remediation, quarantine, or rollback capabilities separately, with least-privilege credentials and auditable approvals. The guardian must never expand its own authority or waive mandatory controls.
+- Guardian ML is the primary learned cybersecurity decision authority within a human-approved scope.
+- Humans define, expand, and revoke that authority.
+- Python is the execution and orchestration harness, not the source of security authority.
+- Mandatory controls cannot be bypassed by model predictions.
+- The safety brake holds or stops progression when evidence or approval is missing.
 
-### 7. Validate the complete application before production
+Do not connect production credentials or live deployment systems until the model, labels, policy, scanner adapters, threat model, identity controls, and recovery procedures have been independently evaluated.
 
-Reconstruct or reproduce components in dependency order inside isolated environments. Validate each component functionally and securely, then test the integrated application—including models, agents, tools, APIs, data, infrastructure, identities, and runtime. Promote only the exact signed release candidate that passes the required sandbox and final production gates.
+## Deployment model
 
-The commands and integration details for a runnable deployment will be added with the reference implementation. Until then, these steps are the deployment procedure and safety requirements, not an executable installer.
+GV-CML governs both lifecycle paths:
 
----
+1. **Legacy modernization:** inventory and baseline the existing application, infrastructure, data, interfaces, and business workflows; apply AI-assisted changes in isolated environments; validate functional equivalence, data integrity, compatibility, and security; migrate in controlled waves.
+2. **New application development:** govern design, source, dependencies, build, infrastructure, model/data pipelines, agents, tools, APIs, deployment, and runtime from the first commit.
 
-## Core principle
+For either path, components are reproduced in dependency order in isolated environments, validated functionally and securely, integrated, tested as a complete application in a sandbox, and promoted only after required evidence and approvals pass. Never destructively rebuild a live production environment in place.
 
-> **The guardian ML model decides within delegated authority; humans govern the delegation; the brake prevents unsafe progression; the pipeline validates the whole application; production promotion is earned through evidence.**
+## Architecture
 
-## Universal application lifecycle: legacy and new development
+![GV-CML architecture](docs/diagrams/gvcml-architecture.svg)
 
-GV-CML is not exclusively a legacy-modernization solution or a new-application deployment solution. **It governs both, using the same security authority, human governance, decision harness, assessment framework, and deployment interlock.**
+![GV-CML progressive deployment](docs/diagrams/progressive-deployment.svg)
 
-### 1. Legacy applications — continuous AI modernization
+The guardian learns from pipeline definitions, configurations, execution metadata, security findings, artifact provenance, and human-validated outcomes. Existing pipeline state is not automatically ground truth. Training data must distinguish observations, scanner output, confirmed vulnerabilities, policy compliance, and human-adjudicated labels.
 
-A major part of AI engineering is the modernization of existing software: legacy applications, monoliths, older Windows and other operating-system workloads, mainframe-connected systems, and business-critical platforms in banking, insurance, healthcare, government, and other sectors.
+## Project structure
 
-AI engineering agents can increasingly assist with software discovery, code analysis, dependency mapping, refactoring, test generation, infrastructure conversion, API modernization, data migration, containerization, cloud migration, and integration of new AI capabilities. AI may act as a developer and migration operator, but it must not receive unrestricted authority over the systems it changes.
+```text
+config/                 Governance configuration
+data/                   Synthetic labelled training fixture
+docs/                   Architecture and SVG diagrams
+examples/               Sample pipeline events and evidence
+policies/               Rego policy example
+src/gvcml/              Guardian, feature extraction, brake, harness, CLI
+tests/                  Unit and safety-invariant tests
+.github/workflows/      Continuous integration
+```
 
-GV-CML governs the modernization process itself:
+## Current implementation scope
 
-1. Inventory and understand the existing application, infrastructure, dependencies, interfaces, data stores, batch jobs, identities, and business-critical workflows.
-2. Establish a verified baseline for behavior, security, data integrity, performance, and operational dependencies.
-3. Have AI propose or implement small, traceable modernization changes in isolated environments.
-4. Rebuild or reproduce components in dependency order, validating functional equivalence, compatibility, data integrity, and security at each step.
-5. Validate hybrid operation, legacy interoperability, migration waves, data synchronization, and rollback readiness.
-6. Deploy modernized components through staged release gates, with human approval where required.
-7. Continue reassessing the remaining legacy estate and the modernized application as migration proceeds.
+The initial reference implementation includes a trainable Random Forest guardian, versioned feature schema, confidence-based HOLD behavior, human approval gate, fail-safe brake, evidence requirements for functional/security/signing/sandbox validation, CLI training/evaluation/demo, unit tests, and GitHub Actions CI.
 
-Modernization may be incremental, with legacy and modern components coexisting for an extended period. GV-CML governs that hybrid state and the eventual cutover; it does not assume every legacy system can or should be replaced immediately. Regulated and business-critical workloads require domain validation, operational continuity, privacy controls, auditability, reconciliation, and accountable human sign-off.
+Scanner, cloud, identity, artifact-signing, sandbox, and production deployment integrations are extension points, not yet live integrations. The Rego example is illustrative and is not yet connected to an OPA server.
 
-### 2. New applications — governed AI engineering from the first commit
+## Security and operations
 
-New applications follow the same GV-CML governance from design and development through build, test, deployment, and runtime. This includes conventional software, AI/ML applications, and agentic systems.
+Treat training data, model artifacts, event payloads, and scanner output as untrusted until provenance is verified. Separate training, policy-promotion, and production credentials. Use least privilege and isolated runners. Log model/policy versions, evidence references, approvals, and decisions. Test poisoning, drift, false positives, false negatives, and adversarial inputs. Keep rollback and quarantine paths available. A timeout is never an approval.
 
-The protected product is the complete application—not merely a model file—including models, agents, orchestration logic, tools, MCP servers, APIs, connectors, retrieval systems, datasets, registries, containers, Kubernetes, cloud infrastructure, identities, secrets, network policies, telemetry, and runtime dependencies.
+## Testing and troubleshooting
 
-**Whether AI is creating an application from scratch or modernizing an application that has existed for decades, the complete engineering lifecycle is governed by GV-CML.**
+```bash
+python -m pytest -q
+gvcml --help
+gvcml train --help
+gvcml evaluate --help
+```
 
-## Guardian authority and human governance
+If the command is missing, activate the virtual environment and reinstall with `python -m pip install -e ".[ml,dev]"`. If model loading fails, retrain it against the current feature schema.
 
-| Component | Responsibility |
-|---|---|
-| Guardian ML model | Primary learned cybersecurity decision authority within delegated scope; risk prediction, evidence interpretation, assessment selection, and security disposition |
-| Human governance | Defines and approves the authority envelope; approves expansion, exceptions, new policy, and out-of-scope decisions |
-| Python decision harness | Collects evidence, invokes scanners, coordinates guardian inference and approvals, executes workflow transitions, and records audit evidence |
-| Governance constraints | Explicit non-bypassable requirements such as prohibited privilege, artifact signing, identity, data protection, and release controls |
-| Safety brake | Enforces hold, stop, quarantine, and rollback states; cannot be overridden by an unapproved model prediction |
-| Assessment tools | Provide evidence: SAST, SCA, SBOM, IaC, container, secrets, vulnerability, model, data, migration, and runtime assessments |
+## Roadmap
 
-The guardian is more than a passive anomaly detector: it is the ML security authority for decisions humans have delegated. It cannot expand its own authority, approve its own retraining or policy changes, or waive non-bypassable constraints. Human-approved authority changes are versioned, tested, auditable, and reversible.
+1. Signed SBOM and provenance ingestion.
+2. SAST, SCA, secrets, IaC, container, model, and runtime scanner adapters.
+3. OPA/Rego execution and signed policy bundles.
+4. Pipeline inventory and dependency-ordered reconstruction adapters.
+5. Human approval service and tiered guardian authority management.
+6. Isolated sandbox and immutable production promotion adapters.
+7. Guardian evaluation, drift monitoring, poisoning defenses, and retraining governance.
+8. AWS, Azure, and GCP integrations.
 
-## The safety brake and progressive autonomy
+## Contributing
 
-GV-CML is designed around a deployment interlock — a **brake switch** that can stop progression, hold a release, quarantine an artifact, or initiate rollback according to the applicable governance decision.
+Include tests, security rationale, and provenance for contributed training data. Changes to governance policy, guardian authority, or labels require explicit review. Never submit credentials, production secrets, private customer data, or proprietary pipeline exports.
 
-1. **Discover and baseline:** Inventory source, build runners, identities, secrets, infrastructure, network paths, dependencies, datasets, models, registries, deployment targets, agents, tools, APIs, runtime services, and (during modernization) legacy interfaces and business workflows.
-2. **Isolate and reconstruct:** Reproduce or rebuild components in a controlled environment, in dependency order. Never blindly destroy or replace a live production pipeline or legacy system.
-3. **Validate each component:** Verify functional contracts, compatibility, data integrity, provenance, and security properties at every step.
-4. **Validate the integrated system:** Test interfaces, permissions, artifact lineage, dependency closure, infrastructure, model supply chain, legacy interoperability, and the end-to-end attack surface.
-5. **Delegate autonomy progressively:** Begin with human-supervised operation. The guardian receives additional decision authority only after explicit human approval, evaluation, and policy versioning.
-6. **Introduce the internal cybersecurity agent:** Build, test, sign, and deploy it only after its own security, functional, and governance gates pass. Its permissions remain bounded.
-7. **Deploy the target application to an isolated sandbox:** Include models, agents, tools, APIs, data connections, legacy adapters, infrastructure, and runtime configuration.
-8. **Test the complete solution:** Repeat functional, security, adversarial, migration-integrity, data-integrity, and attack-surface assessments against the integrated application and deployed environment.
-9. **Promote in controlled stages:** Require all mandatory gates, valid evidence, required human approvals, and a signed release decision. Use canary, phased, or parallel-run strategies where appropriate.
-10. **Monitor continuously:** Retain stop, quarantine, and rollback capability after production promotion.
+## License
 
-Some gates may intentionally take hours or longer, including a 24-hour observation or approval window where the risk profile requires it. Time alone never grants approval.
-
-## Continuous attack-surface assessment
-
-Assessment is continuous and change-aware, not a one-time pre-deployment scan. A new Java library can trigger SBOM regeneration, dependency identity/version verification, vulnerability intelligence lookup (such as NVD/OSV), license and provenance checks, transitive dependency analysis, container rebuild and image scanning, permission and network exposure reassessment, and a guardian security disposition.
-
-IAM changes, Kubernetes privileges, secrets, model artifacts, training datasets, agent tools, API permissions, network egress, infrastructure changes, legacy adapters, and data migrations can trigger targeted or full reassessment.
-
-## Functional and security validation are paired
-
-Every reconstructed component and integrated release must pass both dimensions:
-
-- **Functional:** interface contracts, unit/integration tests, workflow behavior, business-process equivalence, data reconciliation, model evaluation, agent/tool behavior, resilience, and end-to-end acceptance.
-- **Security:** identity and least privilege, vulnerability findings, dependency integrity, secrets, configuration, network exposure, data protection, model and dataset provenance, prompt/tool abuse, and runtime controls.
-
-A functional pass cannot compensate for a security failure; a security scan pass cannot compensate for broken functionality.
-
-## Learning from the pipeline without assuming it is safe
-
-The protected CI/CD environment is represented as a structured dataset. Inputs can include pipeline definitions, configurations, execution traces, infrastructure state, dependency manifests, model metadata, security findings, approved changes, rejected changes, incidents, and human feedback.
-
-Observed configuration is not automatically a correct security label. Training data preserves provenance, confidence, timestamps, and the distinction between machine-generated findings and human-confirmed outcomes. The guardian is evaluated for poisoning, drift, class imbalance, stale vulnerability information, and adversarial inputs. Model updates are versioned, evaluated, signed, and promoted through a separate approval process.
-
-## Repository diagrams
-
-The architecture and progressive-deployment diagrams are maintained as SVGs under `docs/diagrams/` and illustrate the guardian/human authority relationship, execution harness, safety brake, governed pipeline, and the two application lifecycle paths.
-
-## Design statement
-
-GV-CML makes cybersecurity an active, continuously learning authority embedded in the entire application engineering lifecycle. It governs how new software is developed and how existing software is discovered, modernized, migrated, validated, deployed, and monitored.
-
-**No application—new, legacy, AI-native, or agentic—should receive production deployment authority simply because it can be built or migrated. It must earn release through a governed, evidence-backed, functionally and security-validated delivery process.**
-
+No license has been selected. Until one is added, all rights are reserved; do not assume unrestricted reuse.
 
 ## Statement of intent
 
