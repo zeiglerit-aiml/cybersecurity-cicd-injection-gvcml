@@ -43,6 +43,15 @@ The Walkout System is a chamber architecture with contractual gates. Typed Pytho
 
 See [Chamber Contracts and Gate APIs](docs/chamber-contracts.md). The current implementation is a reference enforcement layer; production requires authenticated identities, signed assertions, replay protection, expiry/revocation, durable audit, and live policy/evidence checks.
 
+## Distributed runtime: Kubernetes, Kubeflow, MLflow, and Temporal
+
+GVCML is designed as independently deployable Python services and workers—not one large Python service. Kubernetes is the distributed execution platform; Terraform/OpenTofu provisions infrastructure; Helm packages implemented workloads. Kubeflow Pipelines executes ML/data workflows, MLflow manages experiment and model lifecycle metadata, and Temporal coordinates durable chamber workflows, approvals, retries, escalation, and round-robin returns. These runtimes are complementary and none replaces the GVCML guardian's cybersecurity authority.
+
+**Continuous Training (CT)** and **Continuous Security (CS)** are parallel, coupled workstreams. CT produces evaluated, traceable candidate models; CS continuously evaluates the security of code, dependencies, infrastructure, artifacts, models, agents, and runtime. A candidate model cannot replace the active guardian until provenance, evaluation, policy, guardian, and required human approval gates pass. Registry status or successful pipeline execution is not deployment authorization.
+
+See [Runtime Architecture](docs/runtime-architecture.md) for component responsibilities, chamber contracts, CT/CS workflows, infrastructure design, and the staged implementation plan. The architecture document distinguishes the target platform from integrations that have not yet been implemented.
+
+
 ## AI engineering safety objective
 
 GVCML is designed for an environment in which AI may increasingly generate, modify, test, secure, and operate software. The objective is to make that capability governable: inject security authority into the delivery lifecycle, require verifiable evidence, separate security decisions from human workflow decisions, and expand machine autonomy only within a tested and revocable control envelope. No model is assumed infallible, and no increase in AI capability removes the need for independent policy enforcement, provenance, audit, or recovery.
