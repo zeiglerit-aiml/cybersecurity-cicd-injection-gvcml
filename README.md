@@ -13,6 +13,33 @@ $$
 
 **— JFZ**
 
+## Walkout System: dual decision architecture
+
+GVCML separates **cybersecurity authority** from the **human-interface decision system**:
+
+- **Guardian security authority:** the guardian ML model evaluates the CI/CD pipeline and application lifecycle through the GVCML injection architecture. It owns the learned cybersecurity disposition within a formally approved authority envelope.
+- **Human-interface decision system:** a separate, pluggable decision-algorithm layer works with people to correlate context, triage, prioritize, explain, route, and record approval workflows. It does not overrule the guardian's security disposition.
+- **ITSM bridge:** ITSM is the workflow/audit record for incidents, changes, approvals, and escalation.
+- **Observability bridge:** Prometheus metrics and Grafana dashboards supply operational context and telemetry; they are not security or approval authorities.
+
+The Walkout System progressively introduces classical ML decision algorithms, tensor/neural learning, deep learning, and AI orchestration in a round-robin feedback loop and pyramid-shaped triage model. It can reduce routine human intervention as validated performance and explicit delegation allow, but it does not eliminate human governance.
+
+The reference code now includes:
+- `gvcml.human_bridge`: human-facing triage with a pluggable scoring interface and deterministic bootstrap scorer.
+- `gvcml.walkout`: staged handoff and bounded-autonomy checks.
+- Transition tests requiring human authorization, evaluation, policy review, and rollback readiness.
+- Non-bypassable checks for guardian STOP/HOLD, policy denial, critical findings, and incomplete evidence.
+
+**Autonomy is deliberately narrow:** the current reference permits automatic execution only for a guardian-allowed, policy-allowed, evidence-complete, low-risk, reversible action with an explicit AI ALLOW recommendation. Everything outside that envelope returns to a human. A routine triage route is not itself a deployment authorization; the safety brake remains the final release interlock.
+
+See [the Walkout System architecture](docs/walkout-system.md).
+
+This is a reference architecture, not a claim that production ITSM, Prometheus, Grafana, neural-network, deep-learning, or AI-agent integrations are already connected. Those require dedicated adapters, credentials, security review, monitoring, and integration tests.
+
+## AI engineering safety objective
+
+GVCML is designed for an environment in which AI may increasingly generate, modify, test, secure, and operate software. The objective is to make that capability governable: inject security authority into the delivery lifecycle, require verifiable evidence, separate security decisions from human workflow decisions, and expand machine autonomy only within a tested and revocable control envelope. No model is assumed infallible, and no increase in AI capability removes the need for independent policy enforcement, provenance, audit, or recovery.
+
 ## Installation
 
 Requirements: Python 3.10+, Git, and an isolated environment.
