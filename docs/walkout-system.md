@@ -95,3 +95,12 @@ The system selects assessments based on actual architecture and change context. 
 ## Implementation status
 
 This document defines the target architecture. The repository's initial code provides reference contracts and a local decision-flow demonstration; it does not yet provide production ML triage models, live ITSM connectors, Prometheus/Grafana integrations, neural/deep-learning models, or autonomous deployment adapters. Those integrations require separate implementation, security review, and validation.
+
+
+## Chamber-and-gate contract architecture
+
+The Walkout System is implemented as chambers connected by executable contractual gates, not as a simple linear maturity ladder. Each chamber exposes typed Python interfaces; gate APIs validate the transition contract before a protected operation can run. The default dual-agreement rule requires human approval **and** guardian agreement, matching scope, complete evidence, and policy permission. Neither approval can override a guardian denial or deterministic policy constraint.
+
+The reference implementation is in `src/gvcml/contracts.py`: `GateContract`, `evaluate_gate`, `enforce_gate`, `GateReceipt`, `GateDenied`, and `@requires_gate`. See [Chamber Contracts and Gate APIs](chamber-contracts.md) for the API example, contract states, and production security requirements.
+
+The current Python reference validates caller-supplied claims; it does not yet authenticate identities, verify cryptographic signatures, prevent replay, or connect to live ITSM/guardian services. Production deployment must add those controls and re-check authorization at execution time.
