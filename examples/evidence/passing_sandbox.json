@@ -1,0 +1,9 @@
+{
+  "functional_passed": true,
+  "security_passed": true,
+  "signed_artifact": true,
+  "full_attack_surface_assessed": true,
+  "sandbox_passed": true,
+  "critical_findings": 0,
+  "evidence_refs": ["demo://functional-tests", "demo://security-assessment", "demo://sbom", "demo://sandbox"]
+}
